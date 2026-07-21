@@ -1,0 +1,712 @@
+/* =========================================================================
+   style.css — E-Paper Dashboard
+   Design language: pure black-on-white (or white-on-black) e-ink display.
+   No gradients, no shadows, no colour. Thin 1px hairlines do all the
+   structural work that borders/boxes/shadows would normally do.
+   ========================================================================= */
+
+:root {
+  /* ---- e-ink palette (light / default) -------------------------------- */
+  --bg: #ffffff;
+  --fg: #000000;
+  --fg-dim: #4a4a4a;
+  --fg-faint: #8a8a8a;
+  --line: #000000;
+  --line-soft: #b8b8b8;
+  --track: #d8d8d8;
+  --focus: #000000;
+
+  /* ---- layout ----------------------------------------------------------*/
+  --frame-radius: 14px;
+  --gap: 0;
+  --pad-lg: 22px;
+  --pad-md: 14px;
+  --pad-sm: 8px;
+
+  /* ---- type ------------------------------------------------------------*/
+  --font-ui: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-digital: 'Courier New', 'Consolas', monospace;
+
+  --fs-eyebrow: 11px;
+  --fs-body: 13px;
+  --fs-stat: 15px;
+  --fs-panel-title: 12px;
+}
+
+[data-theme='dark'] {
+  --bg: #0a0a0a;
+  --fg: #f2f2f2;
+  --fg-dim: #b7b7b7;
+  --fg-faint: #7c7c7c;
+  --line: #f2f2f2;
+  --line-soft: #4a4a4a;
+  --track: #333333;
+  --focus: #f2f2f2;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #e9e9e6;
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+[data-theme='dark'] body {
+  background: #1a1a1a;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+}
+
+svg { display: block; }
+
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+}
+
+/* Visually-hidden but screen-reader accessible */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* =========================================================================
+   Device frame — mimics the physical white 3D-printed enclosure + bezel
+   ========================================================================= */
+
+.device {
+  width: 100%;
+  max-width: 1180px;
+  background: #f4f4f1;
+  border-radius: var(--frame-radius);
+  padding: 18px;
+}
+
+[data-theme='dark'] .device {
+  background: #141414;
+}
+
+.screen {
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* =========================================================================
+   Top utility bar (screenshot / fullscreen / refresh / settings)
+   Not part of the physical dashboard, but required for the app shell.
+   ========================================================================= */
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 6px 6px 0 0;
+}
+
+.toolbar button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-dim);
+}
+.toolbar button:hover { color: var(--fg); }
+.toolbar .icon { width: 16px; height: 16px; }
+
+/* =========================================================================
+   Grid — three columns, hairline dividers between & within
+   ========================================================================= */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 27fr 40fr 33fr;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+}
+
+.panel {
+  padding: var(--pad-md) var(--pad-lg);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  transition: background-color 0.6s ease;
+}
+
+.panel[hidden] { display: none; }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-head .icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: var(--fs-panel-title);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.panel-title .status {
+  font-weight: 700;
+}
+
+.stat-line {
+  font-size: var(--fs-body);
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+.stat-line .sep {
+  color: var(--fg-faint);
+  margin: 0 6px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: var(--fs-body);
+}
+
+.stat-row .item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-row .icon { width: 14px; height: 14px; }
+
+/* ---- progress bars ------------------------------------------------------ */
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--track);
+  position: relative;
+  margin: 4px 0 2px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--fg);
+  width: 0%;
+  transition: width 0.8s ease;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+
+/* =========================================================================
+   MIDDLE PANEL — Weather / Compass+AQI / Forecast
+   ========================================================================= */
+
+.weather-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.weather-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  transition: color 0.6s ease;
+}
+
+.weather-temp {
+  font-family: var(--font-digital);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1;
+  margin-left: 10px;
+  letter-spacing: -1px;
+  transition: color 0.6s ease;
+}
+
+.weather-uv {
+  margin-left: auto;
+  text-align: right;
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.weather-uv .value {
+  font-family: var(--font-digital);
+  font-size: 30px;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+}
+
+.weather-details {
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.split-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.split-cell {
+  padding: var(--pad-md) var(--pad-lg);
+  border-right: 1px solid var(--line-soft);
+  transition: background-color 0.6s ease;
+}
+.split-cell:last-child { border-right: none; }
+
+.compass-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.compass-speed {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+
+.aqi-value {
+  font-family: var(--font-digital);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 2px 0;
+  transition: color 0.6s ease;
+}
+
+.aqi-label {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: color 0.6s ease;
+}
+
+.aqi-pollutants {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 10px;
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+
+.forecast-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+}
+
+.forecast-card {
+  padding: 6px 4px;
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.6s ease;
+}
+.forecast-card:last-child { border-right: none; }
+
+.forecast-time {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.forecast-card .icon { width: 24px; height: 24px; }
+
+.forecast-temp {
+  font-family: var(--font-digital);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.forecast-rain {
+  font-size: 10px;
+  color: var(--fg-dim);
+}
+
+/* =========================================================================
+   RIGHT PANEL — Clock / Date / Music / Email
+   ========================================================================= */
+
+.clock-panel {
+  padding-top: var(--pad-lg);
+  padding-bottom: 4px;
+  gap: 2px;
+}
+
+/* Dot-matrix clock: each digit is drawn as a grid of dots, built at runtime
+   from a 5x7 bitmap font (see script.js -> renderDotClock). This is the
+   dashboard's signature element. */
+.dot-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dot-digit {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+  width: 44px;
+  height: 62px;
+}
+
+.dot-digit.colon {
+  width: 14px;
+}
+
+.dot {
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  background: transparent;
+}
+
+.dot.on { background: var(--fg); }
+
+.clock-seconds {
+  text-align: center;
+  font-family: var(--font-digital);
+  font-size: 12px;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+.date-line {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 10px 0 12px;
+}
+
+.music-panel {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.album-art {
+  width: 46px;
+  height: 46px;
+  background: var(--fg);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.15);
+}
+
+.music-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: var(--fs-stat);
+}
+
+.music-title-row .icon { width: 13px; height: 13px; flex-shrink: 0; }
+
+.music-title-scroll {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.music-title-scroll span {
+  display: inline-block;
+}
+
+.music-title-scroll.scrolling span {
+  animation: scroll-title 9s linear infinite;
+  padding-right: 40px;
+}
+
+@keyframes scroll-title {
+  0%, 15% { transform: translateX(0); }
+  85%, 100% { transform: translateX(calc(-100% + 160px)); }
+}
+
+.music-artist {
+  font-size: 12px;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+.music-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.music-controls button {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.music-controls .icon { width: 16px; height: 16px; }
+
+.music-progress {
+  height: 3px;
+  background: var(--track);
+  margin-top: 6px;
+  position: relative;
+}
+.music-progress .fill {
+  height: 100%;
+  background: var(--fg);
+  width: 0%;
+}
+
+.email-panel {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.email-panel .icon { width: 22px; height: 22px; flex-shrink: 0; }
+
+.email-text .count {
+  font-size: var(--fs-stat);
+  font-weight: 700;
+}
+
+.email-text .meta {
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+
+/* =========================================================================
+   Settings panel (slide-over)
+   ========================================================================= */
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 50;
+}
+.settings-overlay[hidden] { display: none; }
+
+.settings-panel {
+  width: min(340px, 90vw);
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  border-left: 1px solid var(--line);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.settings-panel h2 {
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-close {
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+}
+
+.settings-group {
+  border-top: 1px solid var(--line-soft);
+  padding: 12px 0;
+}
+
+.settings-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 6px;
+}
+
+.segmented {
+  display: flex;
+  border: 1px solid var(--line);
+}
+
+.segmented button {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 700;
+  border-right: 1px solid var(--line);
+}
+.segmented button:last-child { border-right: none; }
+.segmented button[aria-pressed='true'] {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.settings-panel select,
+.settings-panel input[type='number'] {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.widget-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 12px;
+}
+
+.widget-toggle input { accent-color: var(--fg); }
+
+.settings-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.settings-actions button {
+  flex: 1;
+  border: 1px solid var(--line);
+  padding: 7px 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.settings-actions button:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* =========================================================================
+   Responsive behaviour
+   ========================================================================= */
+
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  .col {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .split-row { grid-template-columns: 1fr; }
+  .split-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .split-cell:last-child { border-bottom: none; }
+  .weather-temp { font-size: 40px; }
+  .dot-digit { width: 34px; height: 48px; }
+}
+
+@media (max-width: 480px) {
+  body { padding: 8px; }
+  .device { padding: 8px; }
+  .forecast-row { grid-template-columns: repeat(2, 1fr); }
+  .forecast-card:nth-child(2) { border-right: none; }
+  .forecast-card:nth-child(3) { border-top: 1px solid var(--line-soft); }
+  .forecast-card:nth-child(4) { border-top: 1px solid var(--line-soft); }
+  .dot-digit { width: 26px; height: 38px; }
+  .dot-clock { gap: 3px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill, .music-title-scroll span, .compass-arrow {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Print mode: force light e-ink regardless of theme */
+@media print {
+  body { background: #fff; padding: 0; }
+  .device { background: #fff; padding: 0; }
+  .toolbar { display: none; }
+  [data-theme='dark'] .screen { background: #fff; color: #000; }
+}

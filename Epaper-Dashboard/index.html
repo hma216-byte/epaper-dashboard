@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>E-Paper Dashboard</title>
+<meta name="description" content="A functional e-ink style information dashboard: Strava stats, printer & vacuum status, weather, air quality, clock, music and mail." />
+<meta name="theme-color" content="#ffffff" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- ===================== STRAVA ===================== -->
+  <symbol id="icon-bike" viewBox="0 0 24 24">
+    <circle cx="5.5" cy="17.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="18.5" cy="17.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M5.5 17.5 L10 8 h4 M10 8 L14 17.5 M14 17.5 L18.5 17.5 M14 17.5 L10.5 11 M8 8 h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-run" viewBox="0 0 24 24">
+    <circle cx="14.5" cy="4.5" r="1.6" fill="currentColor"/>
+    <path d="M9 21l2.2-4.8-2-1.6 1-4.4 3 2.4 3.4-1.4M9.6 12.4l3-1.2 2 2.6 3.4 1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- ===================== PRINTER ===================== -->
+  <symbol id="icon-printer" viewBox="0 0 24 24">
+    <rect x="5" y="8" width="14" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M7 8V4h10v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M7 15v5h10v-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <circle cx="16" cy="10.6" r="0.9" fill="currentColor"/>
+  </symbol>
+
+  <!-- ===================== VACUUM ===================== -->
+  <symbol id="icon-vacuum" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="12" cy="12" r="2.6" fill="currentColor"/>
+  </symbol>
+
+  <!-- ===================== WEATHER ===================== -->
+  <symbol id="icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <line x1="12" y1="1.5" x2="12" y2="4"/>
+      <line x1="12" y1="20" x2="12" y2="22.5"/>
+      <line x1="1.5" y1="12" x2="4" y2="12"/>
+      <line x1="20" y1="12" x2="22.5" y2="12"/>
+      <line x1="4.4" y1="4.4" x2="6.1" y2="6.1"/>
+      <line x1="17.9" y1="17.9" x2="19.6" y2="19.6"/>
+      <line x1="4.4" y1="19.6" x2="6.1" y2="17.9"/>
+      <line x1="17.9" y1="6.1" x2="19.6" y2="4.4"/>
+    </g>
+  </symbol>
+
+  <symbol id="icon-moon" viewBox="0 0 24 24">
+    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-cloud" viewBox="0 0 24 24">
+    <path d="M7 17.5a4.2 4.2 0 0 1-.6-8.36 5.4 5.4 0 0 1 10.5-1.7 4.4 4.4 0 0 1-1 10.06z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-cloud-sun" viewBox="0 0 24 24">
+    <circle cx="8" cy="7.5" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M7 18.5a4.2 4.2 0 0 1-.4-8.37 5.4 5.4 0 0 1 10.5-1.2 4.4 4.4 0 0 1-.6 9.57z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-rain" viewBox="0 0 24 24">
+    <path d="M7 15a4.2 4.2 0 0 1-.6-8.36 5.4 5.4 0 0 1 10.5-1.7 4.4 4.4 0 0 1-1 10.06z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="8" y1="17.5" x2="7" y2="21"/>
+      <line x1="12" y1="17.5" x2="11" y2="21"/>
+      <line x1="16" y1="17.5" x2="15" y2="21"/>
+    </g>
+  </symbol>
+
+  <symbol id="icon-wind" viewBox="0 0 24 24">
+    <path d="M2.5 8h11a2.5 2.5 0 1 0-2.3-3.5M2.5 12.5h15a2.5 2.5 0 1 1-2.3 3.5M2.5 16.8h8.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- ===================== MISC UI ===================== -->
+  <symbol id="icon-envelope" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="18" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M3.5 6.5 12 13l8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-play" viewBox="0 0 24 24">
+    <path d="M6 4.5v15l14-7.5z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-pause" viewBox="0 0 24 24">
+    <rect x="5.5" y="4.5" width="4.4" height="15" fill="currentColor"/>
+    <rect x="14.1" y="4.5" width="4.4" height="15" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-prev" viewBox="0 0 24 24">
+    <path d="M18 4.5v15L6.5 12z" fill="currentColor"/>
+    <rect x="4" y="4.5" width="2" height="15" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-next" viewBox="0 0 24 24">
+    <path d="M6 4.5v15L17.5 12z" fill="currentColor"/>
+    <rect x="18" y="4.5" width="2" height="15" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-battery" viewBox="0 0 24 24">
+    <rect x="2" y="8" width="17" height="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <rect x="19.5" y="10.4" width="2" height="3.2" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-wifi" viewBox="0 0 24 24">
+    <path d="M4 9.5a13 13 0 0 1 16 0M7 13a8.4 8.4 0 0 1 10 0M10.2 16.4a3.8 3.8 0 0 1 3.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="12" cy="19.4" r="1.1" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-gear" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3.1" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.1 5.9l-1.8 1.8M7.7 16.3l-1.8 1.8M18.1 18.1l-1.8-1.8M7.7 7.7 5.9 5.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="icon-refresh" viewBox="0 0 24 24">
+    <path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4.5h-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-fullscreen" viewBox="0 0 24 24">
+    <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-camera" viewBox="0 0 24 24">
+    <path d="M4 8h3l1.6-2h6.8L17 8h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  </symbol>
+</svg>
+
+<!-- Icon sprite, hidden, referenced everywhere via <use href="#icon-name">.
+     Inlined directly (rather than loaded from icons.svg) so icons render
+     correctly when this file is opened straight from disk via file://,
+     where external SVG fetches are blocked by browsers. icons.svg is kept
+     alongside as a standalone, reusable asset with the same symbol IDs. -->
+
+<main class="device" role="main" aria-label="E-paper dashboard">
+
+  <div class="toolbar" role="toolbar" aria-label="Dashboard controls">
+    <button type="button" id="btn-refresh" aria-label="Refresh data now" title="Refresh now">
+      <svg class="icon"><use href="#icon-refresh"></use></svg>
+    </button>
+    <button type="button" id="btn-screenshot" aria-label="Save a screenshot" title="Screenshot">
+      <svg class="icon"><use href="#icon-camera"></use></svg>
+    </button>
+    <button type="button" id="btn-fullscreen" aria-label="Toggle fullscreen" title="Fullscreen">
+      <svg class="icon"><use href="#icon-fullscreen"></use></svg>
+    </button>
+    <button type="button" id="btn-settings" aria-label="Open settings" title="Settings">
+      <svg class="icon"><use href="#icon-gear"></use></svg>
+    </button>
+  </div>
+
+  <section class="screen" id="screen">
+    <div class="dashboard" id="dashboard">
+
+      <!-- ============================= LEFT COLUMN ============================= -->
+      <div class="col" id="col-left">
+
+        <section class="panel" id="panel-strava" aria-labelledby="strava-title">
+          <div class="panel-head">
+            <svg class="icon"><use href="#icon-bike"></use></svg>
+            <h2 class="panel-title" id="strava-title">Strava Stats</h2>
+          </div>
+          <p class="stat-line">
+            <span id="strava-ytd-year">2026</span>: <span id="strava-ytd">0.0</span> km
+            <span class="sep">|</span>
+            <span id="strava-ly-year">2025</span>: <span id="strava-ly">2782.4</span> km
+          </p>
+          <p class="stat-line">
+            Total: <span id="strava-total">5919.6</span> km <span class="sep">|</span>
+            <span id="strava-acts">175</span> acts
+          </p>
+          <div class="stat-row">
+            <span class="item">
+              <svg class="icon"><use href="#icon-bike"></use></svg>
+              <span id="strava-ride">5919.6 km</span>
+            </span>
+            <span class="item">
+              <svg class="icon"><use href="#icon-run"></use></svg>
+              <span id="strava-walk">201.0 km</span>
+            </span>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-printer" aria-labelledby="printer-title">
+          <div class="panel-head">
+            <svg class="icon"><use href="#icon-printer"></use></svg>
+            <h2 class="panel-title" id="printer-title">
+              Printer: <span class="status" id="printer-status">RUNNING</span>
+            </h2>
+          </div>
+          <div class="progress-track" role="progressbar" aria-labelledby="printer-title" aria-valuemin="0" aria-valuemax="100" id="printer-progress-track">
+            <div class="progress-fill" id="printer-progress-fill"></div>
+          </div>
+          <div class="progress-meta">
+            <span><span id="printer-ink-pct">71</span>% &nbsp;|&nbsp; Rem: <span id="printer-remaining">13</span>m</span>
+            <span><span id="printer-ink-used">113</span>/<span id="printer-ink-cap">201</span> L</span>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-vacuum" aria-labelledby="vacuum-title">
+          <div class="panel-head">
+            <svg class="icon"><use href="#icon-vacuum"></use></svg>
+            <h2 class="panel-title" id="vacuum-title">
+              Bat: <span id="vacuum-battery">84</span>% | <span id="vacuum-room">Room</span>
+            </h2>
+          </div>
+          <p class="stat-line">
+            Clean: <span id="vacuum-area">21.6</span> m2 (<span id="vacuum-pct">47</span>%)
+            <span class="sep">|</span>
+            <span class="status" id="vacuum-status">CLEANING</span>
+          </p>
+          <div class="progress-track" role="progressbar" aria-label="Cleaning progress" aria-valuemin="0" aria-valuemax="100" id="vacuum-progress-track">
+            <div class="progress-fill" id="vacuum-progress-fill"></div>
+          </div>
+          <div class="progress-meta">
+            <span>Rem: <span id="vacuum-remaining">22</span>m</span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ============================ MIDDLE COLUMN ============================ -->
+      <div class="col" id="col-middle">
+
+        <section class="panel" id="panel-weather" aria-labelledby="weather-title">
+          <h2 class="sr-only" id="weather-title">Weather</h2>
+          <div class="weather-top">
+            <svg class="icon weather-icon" id="weather-icon"><use href="#icon-sun"></use></svg>
+            <span class="weather-temp"><span id="weather-temp">12</span>&deg;<span id="weather-unit">C</span></span>
+            <span class="weather-uv">UV<span class="value" id="weather-uv">0</span></span>
+          </div>
+          <div class="weather-details">
+            Humidity: <span id="weather-humidity">40</span>%<br />
+            Press: <span id="weather-pressure">1015.5</span> hPa
+          </div>
+        </section>
+
+        <section class="split-row">
+          <div class="split-cell" id="panel-compass" aria-labelledby="compass-title">
+            <h2 class="sr-only" id="compass-title">Wind compass</h2>
+            <div class="compass-wrap">
+              <svg viewBox="0 0 120 120" width="108" height="108" role="img" aria-label="Wind direction compass">
+                <circle cx="60" cy="60" r="46" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <text x="60" y="14" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">N</text>
+                <text x="106" y="64" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">E</text>
+                <text x="60" y="112" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">S</text>
+                <text x="14" y="64" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">W</text>
+                <g id="compass-arrow" transform="rotate(100 60 60)" style="transition: transform 1s ease, color 0.6s ease;">
+                  <path d="M60 30 L67 66 L60 60 L53 66 Z" fill="currentColor" />
+                </g>
+              </svg>
+              <span class="compass-speed"><span id="wind-speed">14.8</span> <span id="wind-unit">km/h</span></span>
+            </div>
+          </div>
+          <div class="split-cell" id="panel-aqi" aria-labelledby="aqi-title">
+            <h2 class="panel-title" id="aqi-title">Air Quality</h2>
+            <span class="aqi-value" id="aqi-value">50</span>
+            <span class="aqi-label" id="aqi-label">Good</span>
+            <div class="aqi-pollutants">
+              <span>PM2.5: <span id="aqi-pm25">12</span></span>
+              <span>PM10: <span id="aqi-pm10">18</span></span>
+              <span>CO2: <span id="aqi-co2">480</span></span>
+              <span>VOC: <span id="aqi-voc">90</span></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel forecast-panel" id="panel-forecast" aria-labelledby="forecast-title">
+          <h2 class="sr-only" id="forecast-title">Hourly forecast</h2>
+          <div class="forecast-row" id="forecast-row">
+            <!-- 4 forecast cards injected by script.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ============================= RIGHT COLUMN ============================= -->
+      <div class="col" id="col-right">
+
+        <section class="panel clock-panel" id="panel-clock" aria-labelledby="clock-title">
+          <h2 class="sr-only" id="clock-title">Current time</h2>
+          <div class="dot-clock" id="dot-clock" role="img" aria-label="Current time"></div>
+          <div class="clock-seconds" id="clock-seconds"></div>
+          <div class="date-line" id="date-line">Saturday, 28 February</div>
+        </section>
+
+        <section class="panel music-panel" id="panel-music" aria-labelledby="music-title">
+          <h2 class="sr-only" id="music-title">Now playing</h2>
+          <div class="album-art">
+            <img src="assets/images/album-placeholder.svg" alt="" id="album-art-img" />
+          </div>
+          <div class="music-info">
+            <div class="music-title-row">
+              <svg class="icon" id="music-play-icon"><use href="#icon-play"></use></svg>
+              <span class="music-title-scroll" id="music-title-scroll"><span id="music-title">By This River</span></span>
+            </div>
+            <div class="music-artist" id="music-artist">Brian Eno</div>
+            <div class="music-progress"><div class="fill" id="music-progress-fill"></div></div>
+            <div class="music-controls">
+              <button type="button" id="music-prev" aria-label="Previous track">
+                <svg class="icon"><use href="#icon-prev"></use></svg>
+              </button>
+              <button type="button" id="music-toggle" aria-label="Play or pause">
+                <svg class="icon"><use href="#icon-pause"></use></svg>
+              </button>
+              <button type="button" id="music-next" aria-label="Next track">
+                <svg class="icon"><use href="#icon-next"></use></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel email-panel" id="panel-email" aria-labelledby="email-title">
+          <svg class="icon"><use href="#icon-envelope"></use></svg>
+          <div class="email-text">
+            <h2 class="sr-only" id="email-title">Email</h2>
+            <div class="count">Unread Inbox: <span id="email-count">2</span></div>
+            <div class="meta">Last <span id="email-time">17:04</span> from <span id="email-sender">A. Rivera</span></div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ============================= SETTINGS PANEL ============================= -->
+<div class="settings-overlay" id="settings-overlay" hidden>
+  <aside class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-heading">
+    <h2 id="settings-heading">Settings
+      <button type="button" class="settings-close" id="settings-close" aria-label="Close settings">&times;</button>
+    </h2>
+
+    <div class="settings-group">
+      <label id="label-theme">Display</label>
+      <div class="segmented" role="group" aria-labelledby="label-theme">
+        <button type="button" data-setting="theme" data-value="light" aria-pressed="true">White E-Ink</button>
+        <button type="button" data-setting="theme" data-value="dark" aria-pressed="false">Black E-Ink</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label id="label-temp">Temperature Unit</label>
+      <div class="segmented" role="group" aria-labelledby="label-temp">
+        <button type="button" data-setting="temperatureUnit" data-value="C" aria-pressed="true">&deg;C</button>
+        <button type="button" data-setting="temperatureUnit" data-value="F" aria-pressed="false">&deg;F</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label id="label-clock">Clock Format</label>
+      <div class="segmented" role="group" aria-labelledby="label-clock">
+        <button type="button" data-setting="clockFormat" data-value="24" aria-pressed="true">24H</button>
+        <button type="button" data-setting="clockFormat" data-value="12" aria-pressed="false">12H</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label id="label-units">Metric / Imperial</label>
+      <div class="segmented" role="group" aria-labelledby="label-units">
+        <button type="button" data-setting="units" data-value="metric" aria-pressed="true">Metric</button>
+        <button type="button" data-setting="units" data-value="imperial" aria-pressed="false">Imperial</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label for="select-language">Language</label>
+      <select id="select-language">
+        <option value="en">English</option>
+        <option value="es">Espa&ntilde;ol</option>
+      </select>
+    </div>
+
+    <div class="settings-group">
+      <label for="input-refresh">Refresh Interval (seconds)</label>
+      <input type="number" id="input-refresh" min="5" max="300" step="5" value="30" />
+    </div>
+
+    <div class="settings-group">
+      <label>Widget Visibility</label>
+      <label class="widget-toggle"><span>Strava Stats</span><input type="checkbox" data-widget="strava" checked /></label>
+      <label class="widget-toggle"><span>Printer</span><input type="checkbox" data-widget="printer" checked /></label>
+      <label class="widget-toggle"><span>Robot Vacuum</span><input type="checkbox" data-widget="vacuum" checked /></label>
+      <label class="widget-toggle"><span>Weather</span><input type="checkbox" data-widget="weather" checked /></label>
+      <label class="widget-toggle"><span>Wind Compass</span><input type="checkbox" data-widget="compass" checked /></label>
+      <label class="widget-toggle"><span>Air Quality</span><input type="checkbox" data-widget="aqi" checked /></label>
+      <label class="widget-toggle"><span>Hourly Forecast</span><input type="checkbox" data-widget="forecast" checked /></label>
+      <label class="widget-toggle"><span>Clock &amp; Date</span><input type="checkbox" data-widget="clock" checked /></label>
+      <label class="widget-toggle"><span>Music Player</span><input type="checkbox" data-widget="music" checked /></label>
+      <label class="widget-toggle"><span>Email</span><input type="checkbox" data-widget="email" checked /></label>
+    </div>
+
+    <div class="settings-group settings-actions">
+      <button type="button" id="btn-export">Export</button>
+      <button type="button" id="btn-import">Import</button>
+      <input type="file" id="input-import-file" accept="application/json" class="sr-only" />
+    </div>
+  </aside>
+</div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

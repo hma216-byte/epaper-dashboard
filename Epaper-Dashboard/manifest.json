@@ -1,0 +1,19 @@
+{
+  "name": "E-Paper Dashboard",
+  "short_name": "E-Paper",
+  "description": "A minimal e-ink style information dashboard: activity stats, printer & vacuum status, weather, air quality, clock, music and mail.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "assets/images/album-placeholder.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
